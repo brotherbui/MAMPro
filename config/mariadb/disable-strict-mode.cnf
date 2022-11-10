@@ -1,0 +1,4 @@
+[mariadb]
+innodb_strict_mode=OFF
+
+
