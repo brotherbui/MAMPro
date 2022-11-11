@@ -105,6 +105,8 @@ if test $(which brew); then
       sed -i '' 's/;max_input_vars = 1000/max_input_vars = 10000/g' $HOMEBREW_PREFIX/etc/php/"$i"/php.ini
 
       sed -i '' "s/9000/90$NODOT/g" $HOMEBREW_PREFIX/etc/php/"$i"/php-fpm.d/www.conf
+
+       brew services start php@"$i"
     else
       echo "$Yellow"
       echo "PHP $i is already installed! Skip. $Color_Off"

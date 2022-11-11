@@ -30,7 +30,6 @@ if test ! $(which brew); then
   fi
 
   brew doctor
-  brew tap homebrew/services
   brew tap brotherbui/homebrew
   brew install openssl
   
