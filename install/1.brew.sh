@@ -26,7 +26,7 @@ if test ! $(which brew); then
     echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
     eval "$(/opt/homebrew/bin/brew shellenv)"
   else
-    echo 'HOMEBREW_PREFIX=/usr/local' >> ~/.zprofile
+    echo 'export HOMEBREW_PREFIX=/usr/local' >> ~/.zprofile
   fi
 
   brew doctor
