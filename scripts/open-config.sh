@@ -10,5 +10,5 @@ ACTION="$1"
 if [ "$ACTION" == "httpd" ]; then
   code $HOMEBREW_PREFIX/etc/httpd/httpd.conf
 elif [ "$ACTION" == "vhosts" ]; then
-  code $HOMEBREW_PREFIX/etc/httpd/extra/httpd-vhosts.conf
+  code $HOMEBREW_PREFIX/etc/httpd/vhosts
 fi
