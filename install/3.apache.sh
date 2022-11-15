@@ -9,10 +9,6 @@ echo "Macintosh Apache MariaDB PHP installation."
 echo "From Phong Black with 🍑🍌🍑"
 echo "3. Dnsmasq and Apache installation"
 
-config_path="mod_php"
-if [ -f $HOMEBREW_PREFIX/etc/fcgi ]; then
-  config_path="php_fpm"
-fi
 
 if test $(which brew); then
   if [ ! -f $HOMEBREW_PREFIX/sbin/dnsmasq ]; then
@@ -36,16 +32,17 @@ if test $(which brew); then
     fi
     
 
-    mv $HOMEBREW_PREFIX/etc/httpd/httpd.conf $HOMEBREW_PREFIX/etc/httpd/httpd.conf.bak
-    mv $HOMEBREW_PREFIX/etc/httpd/extra/httpd-vhosts.conf $HOMEBREW_PREFIX/etc/httpd/extra/httpd-vhosts.conf.bak
+    mkdir -p $HOMEBREW_PREFIX/etc/httpd/vhosts
+    cp -rf ../config/httpd/localhost.conf $HOMEBREW_PREFIX/etc/httpd/vhosts/localhost.conf
+    sed -i '' "s|current_user|$USER|g" $HOMEBREW_PREFIX/etc/httpd/vhosts/localhost.conf
 
-    cp -rf ../config/httpd/$config_path/httpd.conf $HOMEBREW_PREFIX/etc/httpd/httpd.conf
-    cp -rf ../config/httpd/$config_path/httpd-vhosts.conf $HOMEBREW_PREFIX/etc/httpd/extra/httpd-vhosts.conf
+    cp -rf ../config/httpd/httpd-override.conf $HOMEBREW_PREFIX/etc/httpd/httpd-override.conf
+    sed -i '' "s|current_user|$USER|g" $HOMEBREW_PREFIX/etc/httpd/httpd-override.conf
+    sed -i '' "s|homebrew_prefix|$HOMEBREW_PREFIX|g" $HOMEBREW_PREFIX/etc/httpd/httpd-override.conf
 
-    sed -i '' "s/currentuser/$USER/g" $HOMEBREW_PREFIX/etc/httpd/httpd.conf
-    sed -i '' "s#homebrew_prefix#$HOMEBREW_PREFIX#g" $HOMEBREW_PREFIX/etc/httpd/httpd.conf
+    sed -i '' "s|<IfModule ssl_module>|\\n# Override default settings\\nInclude $HOMEBREW_PREFIX/etc/httpd/httpd-override.conf\\n\\n<IfModule ssl_module>|g" $HOMEBREW_PREFIX/etc/httpd/httpd.conf
 
-    sed -i '' "s/currentuser/$USER/g" $HOMEBREW_PREFIX/etc/httpd/extra/httpd-vhosts.conf
+    brew services restart httpd
 
   fi
 
